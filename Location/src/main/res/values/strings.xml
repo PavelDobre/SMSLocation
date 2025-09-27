@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSLocation</string>
+    <string name="app_version">Version 1</string>
+
+    <string name="add_item">Add item</string>
+    <string name="edit_item">Edit item</string>
+    <string name="settings">Settings</string>
+
+    <string name="enable_service_switch">Enable service</string>
+    <string name="service_running">Service is running</string>
+    <string name="service_channel">Service channel</string>
+    <string name="location_request">Sent a location request to </string>
+
+    <!-- Edit/New contact form -->
+    <string name="sender_name_label">Sender\'s name:</string>
+    <string name="sender_num_label">Sender\'s number:</string>
+    <string name="pick_contact_button">Choose a contact…</string>
+    <string name="prefix_label">Sender\'s message prefix:</string>
+    <string name="ignore_requests_label">Ignore location requests from this number</string>
+    <string name="location_request_label">Send request for location</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="field_empty_label">This field can\'t be empty</string>
+    <string name="number_not_international">This field must start with a country code (\"+xx\")</string>
+    <string name="item_already_added_warning">This number is already in the list!</string>
+    <string name="number_missing">Your contacts app didn\'t return a number. Either use a different contacts app or manually enter the contact\'s details.</string>
+
+    <!-- warn on non-international numbers -->
+    <string name="encourage_e164_number">The number entered does not include a country code. A country code should be included to help match the numbers of incoming SMSs, especially when travelling internationally.</string>
+    <string name="replace_local_number">Would you like to replace the number with\n\t%1$s ?</string>
+    <string name="replace_button_text">Replace</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="accept_button_text">Use Current</string>
+
+    <!-- FAQ -->
+    <string name="version_history_label"><a href="https://github.com/fredx100/sms_my_gps/releases">Version history</a></string>
+    <string name="source_code_label"><a href="https://github.com/fredx100/sms_my_gps">Source code</a> (GPL 2.0 license)</string>
+    <string name="based_on_label">Based on <a href="https://github.com/anevero/sms_my_gps">Anevero\'s project</a> (which is based on <a href="https://github.com/warren-bank/Android-SMS-Automatic-Reply-GPS">Warren Bank\'s project</a>)</string>
+    <string name="faq_label">Frequently asked questions</string>
+    <string name="how_to_faq_question">How to use this app?</string>
+    <string name="how_to_faq_answer">Just add a number and a message to which the app should reply. When your phone gets an SMS message from this number the app will send the phone\'s location in reply.</string>
+    <string name="not_working_faq_question">The app isn\'t sending out my location after receiving a correct message. What\'s happening?</string>
+    <string name="not_working_faq_answer">Firstly, double check that the number and the message prefix in the app match the message. Possibly check this again. If you\'re sure they match, it may be that you received an RCS message, rather than an SMS. Sadly, SMS my GPS doesn\'t currently respond to RCS messages. Read the FAQ question regarding RCS messages, below, for a workaround.</string>
+    <string name="rcs_faq_question">How can I send SMSs if my phone uses RCS messaging?</string>
+    <string name="rcs_faq_answer">Many modern phones use the RCS messaging standard to send messages. These messages don\'t trigger SMS my GPS\'s response. To help with this, it is possible to send an SMS location request from within the app: from the main screen press the button with target\-like icon to send an SMS to the number indicated, with the message saved for that number.\n\nIf your contact needs to send you an SMS location\-request but can\'t, they will need to download this app, also. Then they can use the target button to send you an SMS after adding your details to their app.</string>
+    <string name="background_working_faq_question">Why does this app not work in the background?</string>
+    <string name="background_working_faq_answer">Due to Android restrictions, we can\'t guarantee that app will be able to always work in background. Ensure that this app is allowed to run in background (Settings - Apps). Disable battery saver mode.</string>
+    <string name="last_known_location_not_sent_faq_question">Why does this app not send the last known location?</string>
+    <string name="last_known_location_not_sent_faq_answer">The app can send last known location only if the system can provide it. If Android can\'t provide the last known location (for example, because you had GPS disabled for a long time), the app won\'t send it.</string>
+    <string name="location_permission_faq_question">How does this app use location permission?</string>
+    <string name="location_permission_faq_answer">The app uses it to get the location after receiving an appropriate incoming SMS.</string>
+    <string name="sms_permission_faq_question">How does this app use SMS permission?</string>
+    <string name="sms_permission_faq_answer">The app reads all the incoming SMS to check if it needs to send location as a reply. It doesn\'t store or process your SMS messages in any other way.</string>
+    <string name="contacts_permission_faq_question">How does this app use contacts permission?</string>
+    <string name="contacts_permission_faq_answer">This permission is not necessary. You can provide it to use contact picker when creating a new item. If you don\'t provide it, you still will be able to enter the number manually.</string>
+    <string name="privacy_policy_faq_question">Privacy policy</string>
+    <string name="privacy_policy_faq_answer">This app doesn\'t collect any data. Google Location services may be used for location requests. Their use is regulated by <a href="https://policies.google.com/technologies/location-data">Google Privacy Policy</a>.</string>
+
+    <string name="location_providers_label">Location providers</string>
+    <string name="location_accuracy_label">Location accuracy</string>
+    <string name="other_settings_label">Other settings</string>
+
+    <string name="fused_switch">Google Location Services</string>
+    <string name="fused_switch_summary">Uses different sensors (including GPS) to get quite accurate location in several tens of seconds.</string>
+    <string name="fused_last_known_switch">Last known location (Google Location Services)</string>
+    <string name="fused_last_known_switch_summary">Last known location can be sent almost immediately (if available) but can be quite outdated.</string>
+    <string name="system_gps_switch">GPS</string>
+    <string name="system_gps_switch_summary">Sometimes GPS module can provide a more accurate location than Google Location Services (but it can take up to several minutes).</string>
+    <string name="system_gps_last_known_switch">Last known location (GPS)</string>
+    <string name="system_gps_last_known_switch_summary">Gets the last known location using only the GPS sensor.</string>
+    <string name="system_network_switch">Network</string>
+    <string name="system_network_switch_summary">Uses cellular and nearest WiFi networks to determine the location. Can be less accurate than GPS but is faster.</string>
+    <string name="system_network_last_known_switch">Last known location (network)</string>
+    <string name="system_network_last_known_switch_summary">Gets the last known location using only the network info.</string>
+    <string name="location_accuracy_dropdown">Necessary accuracy (meters)</string>
+    <string name="attempts_number_dropdown">Maximum location requests number</string>
+    <string name="run_on_startup_switch">Run on system startup</string>
+    <string name="run_on_startup_switch_summary">If the service is enabled it will start automatically after system restart.</string>
+    <string name="app_theme_dropdown">App theme</string>
+    <string name="app_theme_system_option">System</string>
+    <string name="app_theme_light_option">Light</string>
+    <string name="app_theme_dark_option">Dark</string>
+    <string name="info">About</string>
+    <string name="back_button">Return</string>
+
+</resources>

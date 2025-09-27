@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSLocation</string>
+    <string name="app_version">Версия 1</string>
+
+    <string name="add_item">Добавить запись</string>
+    <string name="edit_item">Редактировать запись</string>
+    <string name="info">О приложении</string>
+    <string name="settings">Настройки</string>
+
+    <string name="enable_service_switch">Активировать службу</string>
+    <string name="service_running">Служба запущена</string>
+    <string name="service_channel">Служебный канал</string>
+    <!-- <string name="location_request">Sent a location request to </string> -->
+
+    <!-- Edit/New contact form -->
+    <string name="sender_name_label">Имя отправителя:</string>
+    <string name="sender_num_label">Номер отправителя:</string>
+    <string name="pick_contact_button">Выбрать контакт…</string>
+    <string name="prefix_label">Префикс сообщения отправителя:</string>
+    <!-- <string name="ignore_request_label">Ignore location requests from this number</string> -->
+    <!-- <string name="location_request_label">Send request for location</string> -->
+    <string name="delete_button">Удалить</string>
+    <string name="cancel_button">Закрыть</string>
+    <string name="save_button">Сохранить</string>
+    <string name="field_empty_label">Это поле не может быть пустым</string>
+    <!-- <string name="number_not_international">This field must start with a country code (\"+xx\")</string> -->
+    <string name="item_already_added_warning">Этот номер уже есть в списке!</string>
+    <!-- <string name="number_missing">Your contacts provider didn\'t return a number. Either use a different contacts provider or manually enter the contact\'s details.</string> -->
+
+    <!-- warn on non-international numbers -->
+    <!-- <string name="encourage_e164_number">The number entered does not include a country code. A country code should be included to help match the numbers of incoming SMSs, especially when travelling internationally.</string> -->
+    <!-- <string name="replace_local_number">Would you like to replace the number with\n\t%1$s ?</string> -->
+    <!-- <string name="replace_button_text">Replace</string> -->
+    <!-- <string name="edit_button_text">Edit</string> -->
+    <!-- <string name="accept_button_text">Use Current</string> -->
+
+    <!-- FAQ -->
+    <string name="version_history_label"><a href="https://github.com/fredx100/sms_my_gps/releases">История версий</a></string>
+    <string name="source_code_label"><a href="https://github.com/fredx100/sms_my_gps">Исходный код</a> (лицензия GPL 2.0)</string>
+    <string name="based_on_label">На основе <a href="https://github.com/warren-bank/Android-SMS-Automatic-Reply-GPS">проекта Уоррена Бэнка</a></string>
+    <string name="faq_label">Частые вопросы</string>
+    <string name="how_to_faq_question">Как работать с этим приложением?</string>
+    <string name="how_to_faq_answer">Просто добавьте номер и сообщение, на которое приложение должно ответить. Когда ваш телефон получит это сообщение с этого номера, приложение отправит местоположение в ответ на него.</string>
+    <!-- <string name="not_working_faq_question">The app isn\'t sending out my location after receiving a correct message. What\'s happenning?</string> -->
+    <!-- <string name="not_working_faq_answer">Firstly, double check that the number and the message prefix in the app match the message. Possibly check this again. If you\'re sure they match, it may be that you received an RCS message, rather than an SMS. Sadly, SMS my GPS doesn\'t currently respond to RCS messages. Read the FAQ question regarding RCS messages, below, for a workaround.</string> -->
+    <!-- <string name="rcs_faq_question">How can I send SMSs if my phone uses RCS messaging?</string> -->
+    <!-- <string name="rcs_faq_answer">Many modern phones use the RCS messaging standard to send messages. These messages don\'t trigger SMS my GPS\'s response. To help with this, it is possible to send an SMS location requestion from within the app: from the main screen press the button with target\-like icon to send an SMS to the number indicated, with the message saved for that number.\n\nIf your contact needs to send you an SMS location\-request but can\'t, they will need to download this app, also. Then they can use the target button to send you an SMS after adding your details to their app.</string> -->
+    <string name="background_working_faq_question">Почему приложение не работает в фоне?</string>
+    <string name="background_working_faq_answer">Из-за ограничений Android мы не можем гарантировать, что приложение всегда будет работать в фоновом режиме. Убедитесь, что этому приложению разрешено работать в фоновом режиме (Настройки - Приложения). Отключите режим экономии заряда батареи.</string>
+    <string name="last_known_location_not_sent_faq_question">Почему приложение не отправляет последнее известное местоположение?</string>
+    <string name="last_known_location_not_sent_faq_answer">Приложение может отправить последнее известное местоположение, только если система может его предоставить. Если Android не может предоставить последнее известное местоположение (например, потому что GPS был долго отключен), приложение его не отправит.</string>
+    <string name="location_permission_faq_question">Как приложение использует разрешение на доступ к местоположению?</string>
+    <string name="location_permission_faq_answer">Приложение использует его, чтобы получить местоположение после получения соответствующего входящего SMS.</string>
+    <string name="sms_permission_faq_question">Как приложение использует разрешение на доступ к SMS?</string>
+    <string name="sms_permission_faq_answer">Приложение читает все входящие SMS, чтобы проверить, нужно ли отправлять местоположение в ответ. Оно не сохраняет и не обрабатывает ваши SMS-сообщения никаким иным способом.</string>
+    <string name="contacts_permission_faq_question">Как приложение использует разрешение на доступ к контактам?</string>
+    <string name="contacts_permission_faq_answer">Это разрешение необязательное. Вы можете предоставить его, чтобы иметь возможность выбрать контакт при создании нового элемента. Если вы не предоставите его, вы все равно сможете ввести номер самостоятельно.</string>
+    <string name="privacy_policy_faq_question">Политика конфиденциальности</string>
+    <string name="privacy_policy_faq_answer">Приложение не собирает никаких данных. Для запросов местоположения используются службы местоположения Google. Их использование регулируется <a href="https://policies.google.com/technologies/location-data">Политикой конфиденциальности Google</a>.</string>
+    <string name="back_button">Назад</string>
+
+    <string name="location_providers_label">Источники данных о местоположении</string>
+    <string name="location_accuracy_label">Точность местоположения</string>
+    <string name="other_settings_label">Другие настройки</string>
+
+    <string name="fused_switch">Google Location Services</string>
+    <string name="fused_switch_summary">Использует разные датчики устройства (в том числе GPS), чтобы получить местоположение за несколько десятков секунд.</string>
+    <string name="fused_last_known_switch">Последнее известное местоположение (Google Location Services)</string>
+    <string name="fused_last_known_switch_summary">Последнее известное местоположение может быть отправлено сразу (если доступно), но может быть довольно устаревшим.</string>
+    <string name="system_gps_switch">GPS</string>
+    <string name="system_gps_switch_summary">Иногда модуль GPS может предоставить более точное местоположение, чем Google Location Services (но это может занять до нескольких минут).</string>
+    <string name="system_gps_last_known_switch">Последнее известное местоположение (GPS)</string>
+    <string name="system_gps_last_known_switch_summary">Получает последнее известное местоположение, используя только датчик GPS.</string>
+    <string name="system_network_switch">Сеть</string>
+    <string name="system_network_switch_summary">Использует сотовую и доступные Wi-Fi сети для определения местоположения. Оно может быть менее точным, чем при использовании GPS, но получить его можно быстрее.</string>
+    <string name="system_network_last_known_switch">Последнее известное местоположение (сеть)</string>
+    <string name="system_network_last_known_switch_summary">Получает последнее известное местоположение, используя только информацию о сетях.</string>
+    <string name="location_accuracy_dropdown">Требуемая точность (метры)</string>
+    <string name="attempts_number_dropdown">Максимальное количество запросов</string>
+    <string name="run_on_startup_switch">Запускать после загрузки системы</string>
+    <string name="run_on_startup_switch_summary">Если сервис активирован, он будет автоматически запущен после перезагрузки системы.</string>
+    <string name="app_theme_dropdown">Тема приложения</string>
+    <string name="app_theme_system_option">Системная</string>
+    <string name="app_theme_light_option">Светлая</string>
+    <string name="app_theme_dark_option">Темная</string>
+
+
+</resources>

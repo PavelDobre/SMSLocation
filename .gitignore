@@ -1,0 +1,11 @@
+*.iml
+.DS_Store
+local.properties
+signing_key.jks
+signing_config.gradle
+.gradle/
+.idea/
+build/
+release/
+debug/
+captures/

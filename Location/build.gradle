@@ -7,7 +7,7 @@ android {
     signingConfigs {
         release {
             storeFile file("key.jks")
-            storePassword "Fmldfgql29"
+            storePassword "Fmldfgql29" // Delete this temporary pass and create a new one in gradle.properties
             keyAlias "key0"
             keyPassword "Fmldfgql29"
 

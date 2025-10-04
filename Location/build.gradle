@@ -26,8 +26,8 @@ android {
         targetSdkVersion project.ext.targetSdkVersion
 
         applicationId project.ext.applicationId
-        versionName project.ext.releaseVersion
-        versionCode project.ext.releaseVersionCode
+        versionName Version_Name
+        versionCode 5
 //        signingConfig signingConfigs.release
     }
 

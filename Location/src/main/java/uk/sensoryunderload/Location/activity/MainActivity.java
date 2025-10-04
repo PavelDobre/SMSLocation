@@ -225,10 +225,6 @@ public class MainActivity extends AppCompatActivity
     Preferences.setListItems(MainActivity.this, listItems);
   }
 
-  private void startInfoActivity() {
-    startActivity(new Intent(this, InfoActivity.class));
-  }
-
   private void startSettingsActivity() {
     startActivity(new Intent(this, SettingsActivity.class));
   }

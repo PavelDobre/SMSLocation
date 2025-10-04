@@ -6,10 +6,10 @@ apply from: '../constants.gradle'
 android {
     signingConfigs {
         release {
-            storeFile file("key.jks")
-            storePassword "Fmldfgql29"
-            keyAlias "key0"
-            keyPassword "Fmldfgql29"
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
 
         }
     }

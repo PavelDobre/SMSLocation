@@ -1,5 +1,7 @@
 *.iml
 .DS_Store
+*.jks
+gradle.properties
 local.properties
 signing_key.jks
 signing_config.gradle

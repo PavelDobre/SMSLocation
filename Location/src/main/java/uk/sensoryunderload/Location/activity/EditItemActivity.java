@@ -67,7 +67,7 @@ public class EditItemActivity extends AppCompatActivity {
     deleteButton = findViewById(R.id.delete_button);
     saveButton = findViewById(R.id.save_button);
 
-    if (!isContactsPermissionGranted()) {
+    if (isContactsPermissionMissing()) {
       pickContactButton.setEnabled(false);
       requestContactsPermission();
     }
@@ -169,7 +169,7 @@ public class EditItemActivity extends AppCompatActivity {
          context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY_RADIO_ACCESS))) {
       TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
       String countryCode = tm.getNetworkCountryIso();
-      if ((countryCode != null) && (!countryCode.equals(""))) {
+      if ((countryCode != null) && !countryCode.isEmpty()) {
         internationalised_number = formatNumberToE164 (senderNumInput.getText().toString(), countryCode.toUpperCase());
       } else {
         internationalised_number = null;
@@ -179,7 +179,6 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     // Offer to replace with found internationalisation
-    final boolean[] accepted = {false};
     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
     String message = getString(R.string.encourage_e164_number);
     if (internationalised_number != null) {
@@ -233,13 +232,13 @@ public class EditItemActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  private boolean isContactsPermissionGranted() {
-    return checkSelfPermission(Constants.CONTACTS_PERMISSION[0]) ==
+  private boolean isContactsPermissionMissing() {
+    return checkSelfPermission(Constants.CONTACTS_PERMISSION[0]) !=
            PackageManager.PERMISSION_GRANTED;
   }
 
   private void requestContactsPermission() {
-    if (!isContactsPermissionGranted()) {
+    if (isContactsPermissionMissing()) {
       requestPermissions(Constants.CONTACTS_PERMISSION,
                          Constants.CONTACTS_PERMISSION_REQUEST_CODE);
     }
@@ -251,7 +250,8 @@ public class EditItemActivity extends AppCompatActivity {
                                          @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     if (requestCode == Constants.CONTACTS_PERMISSION_REQUEST_CODE) {
-      if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+      if (grantResults.length == 0 ||
+          grantResults[0] != PackageManager.PERMISSION_GRANTED) {
         return;
       }
       recreate();

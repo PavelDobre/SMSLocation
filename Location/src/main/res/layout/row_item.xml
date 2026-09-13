@@ -22,9 +22,7 @@
         app:layout_constraintEnd_toStartOf="@+id/requestRingButton"
         app:layout_constraintStart_toEndOf="@+id/listItemTextView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
-        app:layout_constraintWidth_max="wrap"
-        app:layout_constraintWidth_min="wrap" />
+        app:layout_constrainedWidth="true" />
 
     <Button
         android:id="@+id/requestRingButton"
@@ -40,9 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/requestLocationButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
-        app:layout_constraintWidth_max="wrap"
-        app:layout_constraintWidth_min="wrap" />
+        app:layout_constrainedWidth="true" />
 
     <ImageView
         android:id="@+id/ignoreImageView"

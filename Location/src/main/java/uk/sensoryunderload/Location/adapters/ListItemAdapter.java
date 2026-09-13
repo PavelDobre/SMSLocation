@@ -85,10 +85,10 @@ final public class ListItemAdapter extends ArrayAdapter<ListItem>
       viewHolder = new ViewHolder();
       LayoutInflater inflater = LayoutInflater.from(getContext());
       convertView = inflater.inflate(R.layout.row_item, parent, false);
-      viewHolder.ignoreIndicator = (ImageView) convertView.findViewById(R.id.ignoreImageView);
-      viewHolder.itemText = (TextView) convertView.findViewById(R.id.listItemTextView);
-      viewHolder.requestButton = (Button) convertView.findViewById(R.id.requestLocationButton);
-      viewHolder.ringButton = (Button) convertView.findViewById(R.id.requestRingButton);
+      viewHolder.ignoreIndicator = convertView.findViewById(R.id.ignoreImageView);
+      viewHolder.itemText = convertView.findViewById(R.id.listItemTextView);
+      viewHolder.requestButton = convertView.findViewById(R.id.requestLocationButton);
+      viewHolder.ringButton = convertView.findViewById(R.id.requestRingButton);
 
       convertView.setTag(viewHolder);
     } else {

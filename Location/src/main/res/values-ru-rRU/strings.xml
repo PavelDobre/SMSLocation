@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SMSLocation</string>
-    <string name="app_version">Версия 1</string>
+    <string name="app_version">Версия 3</string>
 
     <string name="add_item">Добавить запись</string>
     <string name="edit_item">Редактировать запись</string>
@@ -29,7 +29,7 @@
     <string name="pick_contact_button">Выбрать контакт…</string>
     <string name="prefix_label">Префикс запроса местоположения:</string>
     <string name="alarm_prefix_label">Префикс команды звонка (необязательно):</string>
-    <!-- <string name="ignore_request_label">Ignore location requests from this number</string> -->
+    <string name="ignore_requests_label">Игнорировать запросы с этого номера</string>
     <string name="location_request_label">Отправить запрос местоположения</string>
     <string name="ring_request_label">Отправить RING; долгое нажатие отправляет STOP</string>
     <string name="delete_button">Удалить</string>
@@ -37,16 +37,16 @@
     <string name="save_button">Сохранить</string>
     <string name="field_empty_label">Это поле не может быть пустым</string>
     <string name="request_prefixes_overlap">Префиксы местоположения и звонка должны отличаться и не должны начинаться друг с друга</string>
-    <!-- <string name="number_not_international">This field must start with a country code (\"+xx\")</string> -->
+    <string name="number_not_international">Поле должно начинаться с кода страны (\"+xx\")</string>
     <string name="item_already_added_warning">Этот номер уже есть в списке!</string>
-    <!-- <string name="number_missing">Your contacts provider didn\'t return a number. Either use a different contacts provider or manually enter the contact\'s details.</string> -->
+    <string name="number_missing">Приложение контактов не вернуло номер. Используйте другое приложение контактов или введите данные контакта вручную.</string>
 
     <!-- warn on non-international numbers -->
-    <!-- <string name="encourage_e164_number">The number entered does not include a country code. A country code should be included to help match the numbers of incoming SMSs, especially when travelling internationally.</string> -->
-    <!-- <string name="replace_local_number">Would you like to replace the number with\n\t%1$s ?</string> -->
-    <!-- <string name="replace_button_text">Replace</string> -->
-    <!-- <string name="edit_button_text">Edit</string> -->
-    <!-- <string name="accept_button_text">Use Current</string> -->
+    <string name="encourage_e164_number">Введённый номер не содержит кода страны. Код страны помогает правильно сопоставлять номера входящих SMS, особенно в роуминге.</string>
+    <string name="replace_local_number">Заменить номер на\n\t%1$s ?</string>
+    <string name="replace_button_text">Заменить</string>
+    <string name="edit_button_text">Изменить</string>
+    <string name="accept_button_text">Использовать текущий</string>
 
 
     <string name="back_button">Назад</string>

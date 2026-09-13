@@ -53,10 +53,10 @@ public class SMSSender {
       // READ_PHONE_STATE. SMSLocation does not need that sensitive permission,
       // so fall back to a local Unicode-safe splitter instead of crashing.
       Log.w(TAG, "SmsManager.divideMessage() was denied; using local multipart splitter", exception);
-      messages = divideUnicodeMessage(message, FALLBACK_UNICODE_PART_LENGTH);
+      messages = divideUnicodeMessage(message);
     } catch (RuntimeException exception) {
       Log.w(TAG, "SmsManager.divideMessage() failed; using local multipart splitter", exception);
-      messages = divideUnicodeMessage(message, FALLBACK_UNICODE_PART_LENGTH);
+      messages = divideUnicodeMessage(message);
     }
 
     if (messages.isEmpty()) {
@@ -102,7 +102,7 @@ public class SMSSender {
     }
   }
 
-  private static ArrayList<String> divideUnicodeMessage(String text, int maxPartLength) {
+  private static ArrayList<String> divideUnicodeMessage(String text) {
     ArrayList<String> parts = new ArrayList<>();
     if (text == null || text.isEmpty()) {
       return parts;
@@ -110,7 +110,7 @@ public class SMSSender {
 
     int start = 0;
     while (start < text.length()) {
-      int end = Math.min(start + maxPartLength, text.length());
+      int end = Math.min(start + FALLBACK_UNICODE_PART_LENGTH, text.length());
 
       // Do not split a UTF-16 surrogate pair between SMS parts.
       if (end < text.length() && end > start &&

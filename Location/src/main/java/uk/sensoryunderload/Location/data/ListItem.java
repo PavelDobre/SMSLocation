@@ -106,7 +106,7 @@ public final class ListItem {
            context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY_RADIO_ACCESS))) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String countryCode = (tm == null) ? null : tm.getNetworkCountryIso();
-        if ((countryCode != null) && (!countryCode.equals(""))) {
+        if ((countryCode != null) && !countryCode.isEmpty()) {
           return PhoneNumberUtils.areSamePhoneNumber(item.sender, sender, countryCode);
         }
       }

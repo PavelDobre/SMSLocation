@@ -34,11 +34,9 @@ public class MainActivity extends AppCompatActivity
                           implements ListItemAdapter.ListManager {
   private SwitchCompat enableServiceSwitch;
 
-  private ListView listView;
   private ArrayList<ListItem> listItems;
   private ArrayAdapter<ListItem> listAdapter;
 
-  private FloatingActionButton plusButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -55,24 +53,21 @@ public class MainActivity extends AppCompatActivity
       Preferences.setServiceEnabled(MainActivity.this, checked);
       Intent serviceIntent = new Intent(this, ForegroundService.class);
       if (checked) {
-        if (!startForegroundServiceSafely(serviceIntent)) {
-          enableServiceSwitch.setChecked(false);
-          Preferences.setServiceEnabled(MainActivity.this, false);
-        }
+        boolean serviceStarted = startForegroundServiceSafely(serviceIntent);
+        enableServiceSwitch.setChecked(serviceStarted);
+        Preferences.setServiceEnabled(MainActivity.this, serviceStarted);
       } else {
         stopService(serviceIntent);
       }
     });
 
-    listView = findViewById(R.id.list_view);
+    ListView listView = findViewById(R.id.list_view);
     listItems = Preferences.getListItems(MainActivity.this);
     listAdapter = new ListItemAdapter(listItems, this, getApplicationContext());
     listView.setAdapter(listAdapter);
-    listView.setOnItemClickListener((parent, view, position, id) -> {
-      startEditActivity(position);
-    });
+    listView.setOnItemClickListener((parent, view, position, id) -> startEditActivity(position));
 
-    plusButton = findViewById(R.id.plus_button);
+    FloatingActionButton plusButton = findViewById(R.id.plus_button);
     plusButton.setOnClickListener(v -> startEditActivity(-1));
 
     if (RemoteAlarm.isRunning()) {
@@ -84,10 +79,6 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-  }
 
   private boolean areLocationAndSmsPermissionsGranted() {
     for (String permission : Constants.LOCATION_AND_SMS_PERMISSIONS) {
@@ -166,10 +157,9 @@ public class MainActivity extends AppCompatActivity
       boolean serviceEnabled = Preferences.isServiceEnabled(MainActivity.this);
       enableServiceSwitch.setChecked(serviceEnabled);
       if (serviceEnabled) {
-        if (!startForegroundServiceSafely(serviceIntent)) {
-          enableServiceSwitch.setChecked(false);
-          Preferences.setServiceEnabled(MainActivity.this, false);
-        }
+        boolean serviceStarted = startForegroundServiceSafely(serviceIntent);
+        enableServiceSwitch.setChecked(serviceStarted);
+        Preferences.setServiceEnabled(MainActivity.this, serviceStarted);
       } else {
         stopService(serviceIntent);
       }

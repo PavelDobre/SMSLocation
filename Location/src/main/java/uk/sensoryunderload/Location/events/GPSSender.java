@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import uk.sensoryunderload.Location.data.Preferences;
@@ -115,10 +116,12 @@ public final class GPSSender {
     }
   }
 
+  // This field only ever stores getApplicationContext() and is cleared in reset().
+  @SuppressLint("StaticFieldLeak")
   private static Context context = null;
   private static Result[] results = null;
-  private static final ArrayList<String> recipients = new ArrayList<String>();
-  private static final ArrayList<LocationListener> locationListeners = new ArrayList<LocationListener>();
+  private static final ArrayList<String> recipients = new ArrayList<>();
+  private static final ArrayList<LocationListener> locationListeners = new ArrayList<>();
   private static LocationCallback fusedLocationCallback = null;
   private static final Handler handler = new Handler(Looper.getMainLooper());
   private static Runnable timeoutRunnable = null;
@@ -143,7 +146,7 @@ public final class GPSSender {
 
   @SuppressLint("MissingPermission")
   public static void notify(Context _context, String recipient) {
-    final boolean newRequest = (recipients.size() == 0);
+    final boolean newRequest = recipients.isEmpty();
 
     recipients.add (recipient);
 
@@ -233,7 +236,7 @@ public final class GPSSender {
   // If no live result is pending or exists then the most *recent*
   // last-known result is sent.
   public static void notifyResults() {
-    if (recipients.size() != 0) {
+    if (!recipients.isEmpty()) {
       boolean liveResultsPending = false;
       // Check whether any live results have completed.
       for (Result result : results) {
@@ -374,13 +377,13 @@ public final class GPSSender {
     }
 
     if (Preferences.isFusedLocationEnabled(context)) {
-      LocationRequest locationRequest = new LocationRequest()
+      LocationRequest locationRequest = LocationRequest.create()
               .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
               .setInterval(5000);
       fusedLocationCallback = new FusedLocationCallback(
               fusedLocationProvider, maximumAttemptsNumber);
       fusedLocationProvider.requestLocationUpdates(
-              locationRequest, fusedLocationCallback, null)
+              locationRequest, fusedLocationCallback, Looper.getMainLooper())
               .addOnFailureListener(exception -> {
                 Log.e(TAG, "Fused current-location request failed", exception);
                 if (results != null) {
@@ -408,7 +411,7 @@ public final class GPSSender {
 
     Result result = results[ResultType.GPS.ordinal()];
     Result lastKnownResult = results[ResultType.GPS_LAST_KNOWN.ordinal()];
-    if (provider != LocationManager.GPS_PROVIDER) {
+    if (!LocationManager.GPS_PROVIDER.equals(provider)) {
       result = results[ResultType.NETWORK.ordinal()];
       lastKnownResult = results[ResultType.NETWORK_LAST_KNOWN.ordinal()];
     }
@@ -469,10 +472,11 @@ public final class GPSSender {
       Log.i(TAG, "Received current location from fused provider, attempt " +
                  currentAttemptsNumber);
 
-      Location location = result.getLastLocation();
-      if (location == null) {
-        Log.i(TAG, "Skipping location from fused provider: location is null");
+      List<Location> locations = result.getLocations();
+      if (locations.isEmpty()) {
+        Log.i(TAG, "Skipping location from fused provider: no locations returned");
       } else {
+        Location location = locations.get(locations.size() - 1);
         results[ResultType.GOOGLE.ordinal()].location = location;
 
         if (location.getAccuracy() > minimumLocationAccuracy) {

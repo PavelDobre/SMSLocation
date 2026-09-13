@@ -3,7 +3,7 @@ package uk.sensoryunderload.Location.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -138,15 +138,14 @@ public final class Preferences {
   public static int getTheme(Context context) {
     SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(context);
+    String systemMode = context.getString(R.string.app_theme_system);
     String mode = preferences.getString(
-            context.getString(R.string.app_theme),
-            context.getString(R.string.app_theme_system));
-    assert mode != null;
-    if (mode.equals(context.getString(R.string.app_theme_system))) {
+            context.getString(R.string.app_theme), systemMode);
+    if (systemMode.equals(mode)) {
       return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-    } else if (mode.equals(context.getString(R.string.app_theme_light))) {
+    } else if (context.getString(R.string.app_theme_light).equals(mode)) {
       return AppCompatDelegate.MODE_NIGHT_NO;
-    } else if (mode.equals(context.getString(R.string.app_theme_dark))) {
+    } else if (context.getString(R.string.app_theme_dark).equals(mode)) {
       return AppCompatDelegate.MODE_NIGHT_YES;
     }
     return AppCompatDelegate.MODE_NIGHT_UNSPECIFIED;

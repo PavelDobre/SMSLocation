@@ -1,0 +1,9 @@
+project.ext {
+    releaseVersionCode = 01
+    releaseVersion = "2.1"
+    minSdkVersion = 23
+    targetSdkVersion = 31
+    compileSdkVersion = 33
+    javaVersion = JavaVersion.VERSION_17
+    applicationId = 'uk.sensoryunderload.Location'
+}

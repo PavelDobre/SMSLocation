@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSLocation</string>
+    <string name="app_version">Version 3</string>
+
+    <string name="add_item">Add item</string>
+    <string name="edit_item">Edit item</string>
+    <string name="settings">Settings</string>
+
+    <string name="enable_service_switch">Enable service</string>
+    <string name="service_running">Service is running</string>
+    <string name="service_channel">Service channel</string>
+    <string name="location_request">Sent a location request to </string>
+
+    <!-- Edit/New contact form -->
+    <string name="sender_name_label">Sender\'s name:</string>
+    <string name="sender_num_label">Sender\'s number:</string>
+    <string name="pick_contact_button">Choose a contact…</string>
+    <string name="prefix_label">Sender\'s message prefix:</string>
+    <string name="ignore_requests_label">Ignore location requests from this number</string>
+    <string name="location_request_label">Send request for location</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="save_button">Save</string>
+    <string name="field_empty_label">This field can\'t be empty</string>
+    <string name="number_not_international">This field must start with a country code (\"+xx\")</string>
+    <string name="item_already_added_warning">This number is already in the list!</string>
+    <string name="number_missing">Your contacts app didn\'t return a number. Either use a different contacts app or manually enter the contact\'s details.</string>
+
+    <!-- warn on non-international numbers -->
+    <string name="encourage_e164_number">The number entered does not include a country code. A country code should be included to help match the numbers of incoming SMSs, especially when travelling internationally.</string>
+    <string name="replace_local_number">Would you like to replace the number with\n\t%1$s ?</string>
+    <string name="replace_button_text">Replace</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="accept_button_text">Use Current</string>
+    <string name="location_providers_label">Location providers</string>
+    <string name="location_accuracy_label">Location accuracy</string>
+    <string name="other_settings_label">Other settings</string>
+
+    <string name="fused_switch">Google Location Services</string>
+    <string name="fused_switch_summary">Uses different sensors (including GPS) to get quite accurate location in several tens of seconds.</string>
+    <string name="fused_last_known_switch">Last known location (Google Location Services)</string>
+    <string name="fused_last_known_switch_summary">Last known location can be sent almost immediately (if available) but can be quite outdated.</string>
+    <string name="system_gps_switch">GPS</string>
+    <string name="system_gps_switch_summary">Sometimes GPS module can provide a more accurate location than Google Location Services (but it can take up to several minutes).</string>
+    <string name="system_gps_last_known_switch">Last known location (GPS)</string>
+    <string name="system_gps_last_known_switch_summary">Gets the last known location using only the GPS sensor.</string>
+    <string name="system_network_switch">Network</string>
+    <string name="system_network_switch_summary">Uses cellular and nearest WiFi networks to determine the location. Can be less accurate than GPS but is faster.</string>
+    <string name="system_network_last_known_switch">Last known location (network)</string>
+    <string name="system_network_last_known_switch_summary">Gets the last known location using only the network info.</string>
+    <string name="location_accuracy_dropdown">Necessary accuracy (meters)</string>
+    <string name="attempts_number_dropdown">Maximum location requests number</string>
+    <string name="run_on_startup_switch">Run on system startup</string>
+    <string name="run_on_startup_switch_summary">If the service is enabled it will start automatically after system restart.</string>
+    <string name="app_theme_dropdown">App theme</string>
+    <string name="app_theme_system_option">System</string>
+    <string name="app_theme_light_option">Light</string>
+    <string name="app_theme_dark_option">Dark</string>
+    <string name="info">About</string>
+    <string name="back_button">Return</string>
+
+</resources>

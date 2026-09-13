@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMSLocation</string>
+    <string name="app_version">Версия 1</string>
+
+    <string name="add_item">Добавить запись</string>
+    <string name="edit_item">Редактировать запись</string>
+    <string name="info">О приложении</string>
+    <string name="settings">Настройки</string>
+
+    <string name="enable_service_switch">Активировать службу</string>
+    <string name="service_running">Служба запущена</string>
+    <string name="service_channel">Служебный канал</string>
+    <!-- <string name="location_request">Sent a location request to </string> -->
+
+    <!-- Edit/New contact form -->
+    <string name="sender_name_label">Имя отправителя:</string>
+    <string name="sender_num_label">Номер отправителя:</string>
+    <string name="pick_contact_button">Выбрать контакт…</string>
+    <string name="prefix_label">Префикс сообщения отправителя:</string>
+    <!-- <string name="ignore_request_label">Ignore location requests from this number</string> -->
+    <!-- <string name="location_request_label">Send request for location</string> -->
+    <string name="delete_button">Удалить</string>
+    <string name="cancel_button">Закрыть</string>
+    <string name="save_button">Сохранить</string>
+    <string name="field_empty_label">Это поле не может быть пустым</string>
+    <!-- <string name="number_not_international">This field must start with a country code (\"+xx\")</string> -->
+    <string name="item_already_added_warning">Этот номер уже есть в списке!</string>
+    <!-- <string name="number_missing">Your contacts provider didn\'t return a number. Either use a different contacts provider or manually enter the contact\'s details.</string> -->
+
+    <!-- warn on non-international numbers -->
+    <!-- <string name="encourage_e164_number">The number entered does not include a country code. A country code should be included to help match the numbers of incoming SMSs, especially when travelling internationally.</string> -->
+    <!-- <string name="replace_local_number">Would you like to replace the number with\n\t%1$s ?</string> -->
+    <!-- <string name="replace_button_text">Replace</string> -->
+    <!-- <string name="edit_button_text">Edit</string> -->
+    <!-- <string name="accept_button_text">Use Current</string> -->
+
+
+    <string name="back_button">Назад</string>
+
+    <string name="location_providers_label">Источники данных о местоположении</string>
+    <string name="location_accuracy_label">Точность местоположения</string>
+    <string name="other_settings_label">Другие настройки</string>
+
+    <string name="fused_switch">Google Location Services</string>
+    <string name="fused_switch_summary">Использует разные датчики устройства (в том числе GPS), чтобы получить местоположение за несколько десятков секунд.</string>
+    <string name="fused_last_known_switch">Последнее известное местоположение (Google Location Services)</string>
+    <string name="fused_last_known_switch_summary">Последнее известное местоположение может быть отправлено сразу (если доступно), но может быть довольно устаревшим.</string>
+    <string name="system_gps_switch">GPS</string>
+    <string name="system_gps_switch_summary">Иногда модуль GPS может предоставить более точное местоположение, чем Google Location Services (но это может занять до нескольких минут).</string>
+    <string name="system_gps_last_known_switch">Последнее известное местоположение (GPS)</string>
+    <string name="system_gps_last_known_switch_summary">Получает последнее известное местоположение, используя только датчик GPS.</string>
+    <string name="system_network_switch">Сеть</string>
+    <string name="system_network_switch_summary">Использует сотовую и доступные Wi-Fi сети для определения местоположения. Оно может быть менее точным, чем при использовании GPS, но получить его можно быстрее.</string>
+    <string name="system_network_last_known_switch">Последнее известное местоположение (сеть)</string>
+    <string name="system_network_last_known_switch_summary">Получает последнее известное местоположение, используя только информацию о сетях.</string>
+    <string name="location_accuracy_dropdown">Требуемая точность (метры)</string>
+    <string name="attempts_number_dropdown">Максимальное количество запросов</string>
+    <string name="run_on_startup_switch">Запускать после загрузки системы</string>
+    <string name="run_on_startup_switch_summary">Если сервис активирован, он будет автоматически запущен после перезагрузки системы.</string>
+    <string name="app_theme_dropdown">Тема приложения</string>
+    <string name="app_theme_system_option">Системная</string>
+    <string name="app_theme_light_option">Светлая</string>
+    <string name="app_theme_dark_option">Темная</string>
+
+
+</resources>

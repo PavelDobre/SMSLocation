@@ -24,7 +24,11 @@ public class BootReceiver extends BroadcastReceiver {
         Preferences.isRunOnStartupEnabled(context)) {
       Log.i(TAG, "Starting foreground service");
       Intent serviceIntent = new Intent(context, ForegroundService.class);
-      ContextCompat.startForegroundService(context, serviceIntent);
+      try {
+        ContextCompat.startForegroundService(context, serviceIntent);
+      } catch (RuntimeException exception) {
+        Log.e(TAG, "Unable to start foreground service after boot", exception);
+      }
     }
   }
 }

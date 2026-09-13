@@ -60,7 +60,11 @@ public final class Preferences {
     String json = preferences.getString(
             context.getString(R.string.list_items), null);
     try {
-      return (json == null) ? new ArrayList<>() : ListItem.fromJson(json);
+      if (json == null) {
+        return new ArrayList<>();
+      }
+      ArrayList<ListItem> items = ListItem.fromJson(json);
+      return (items == null) ? new ArrayList<>() : items;
     } catch (RuntimeException exception) {
       return new ArrayList<>();
     }

@@ -9,20 +9,33 @@
 
     <string name="enable_service_switch">Enable service</string>
     <string name="service_running">Service is running</string>
+    <string name="service_start_failed">Unable to start background service on this device.</string>
     <string name="service_channel">Service channel</string>
     <string name="location_request">Sent a location request to </string>
+    <string name="ring_request">Sent a RING request to </string>
+    <string name="ring_request_not_configured">Ring request code is not configured for this number</string>
+    <string name="ring_stop_request">Sent a STOP alarm request to </string>
+    <string name="sms_send_failed">Unable to send SMS. Check SMS permission, SIM/subscription and destination number.</string>
+    <string name="remote_alarm_active">Remote alarm is sounding</string>
+    <string name="stop_alarm_button">STOP</string>
+    <string name="alarm_notification_channel">Remote alarm</string>
+    <string name="alarm_notification_title">SMSLocation alarm</string>
+    <string name="alarm_notification_text">Phone is ringing loudly. Tap STOP to silence it.</string>
 
     <!-- Edit/New contact form -->
     <string name="sender_name_label">Sender\'s name:</string>
     <string name="sender_num_label">Sender\'s number:</string>
     <string name="pick_contact_button">Choose a contact…</string>
-    <string name="prefix_label">Sender\'s message prefix:</string>
-    <string name="ignore_requests_label">Ignore location requests from this number</string>
+    <string name="prefix_label">Location request message prefix:</string>
+    <string name="alarm_prefix_label">Ring request message prefix (optional):</string>
+    <string name="ignore_requests_label">Ignore requests from this number</string>
     <string name="location_request_label">Send request for location</string>
+    <string name="ring_request_label">Send RING request; long press to send STOP</string>
     <string name="delete_button">Delete</string>
     <string name="cancel_button">Cancel</string>
     <string name="save_button">Save</string>
     <string name="field_empty_label">This field can\'t be empty</string>
+    <string name="request_prefixes_overlap">Location and ring prefixes must be different and must not start with each other</string>
     <string name="number_not_international">This field must start with a country code (\"+xx\")</string>
     <string name="item_already_added_warning">This number is already in the list!</string>
     <string name="number_missing">Your contacts app didn\'t return a number. Either use a different contacts app or manually enter the contact\'s details.</string>

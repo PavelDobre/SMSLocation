@@ -23,6 +23,7 @@ import uk.sensoryunderload.Location.data.Constants;
 import uk.sensoryunderload.Location.data.ListItem;
 import uk.sensoryunderload.Location.data.Preferences;
 import uk.sensoryunderload.Location.events.ForegroundService;
+import uk.sensoryunderload.Location.events.RemoteAlarm;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -54,7 +55,10 @@ public class MainActivity extends AppCompatActivity
       Preferences.setServiceEnabled(MainActivity.this, checked);
       Intent serviceIntent = new Intent(this, ForegroundService.class);
       if (checked) {
-        ContextCompat.startForegroundService(this, serviceIntent);
+        if (!startForegroundServiceSafely(serviceIntent)) {
+          enableServiceSwitch.setChecked(false);
+          Preferences.setServiceEnabled(MainActivity.this, false);
+        }
       } else {
         stopService(serviceIntent);
       }
@@ -70,6 +74,14 @@ public class MainActivity extends AppCompatActivity
 
     plusButton = findViewById(R.id.plus_button);
     plusButton.setOnClickListener(v -> startEditActivity(-1));
+
+    if (RemoteAlarm.isRunning()) {
+      Snackbar.make(findViewById(android.R.id.content),
+                    R.string.remote_alarm_active,
+                    Snackbar.LENGTH_INDEFINITE)
+              .setAction(R.string.stop_alarm_button, v -> RemoteAlarm.stop())
+              .show();
+    }
   }
 
   @Override
@@ -142,10 +154,9 @@ public class MainActivity extends AppCompatActivity
 
   private void updateServiceSwitchStatus() {
     Intent serviceIntent = new Intent(this, ForegroundService.class);
-    stopService(serviceIntent);
-    enableServiceSwitch.setChecked(false);
 
     if (!areLocationAndSmsPermissionsGranted()) {
+      stopService(serviceIntent);
       enableServiceSwitch.setEnabled(false);
       enableServiceSwitch.setClickable(false);
       enableServiceSwitch.setChecked(false);
@@ -155,8 +166,24 @@ public class MainActivity extends AppCompatActivity
       boolean serviceEnabled = Preferences.isServiceEnabled(MainActivity.this);
       enableServiceSwitch.setChecked(serviceEnabled);
       if (serviceEnabled) {
-        ContextCompat.startForegroundService(this, serviceIntent);
+        if (!startForegroundServiceSafely(serviceIntent)) {
+          enableServiceSwitch.setChecked(false);
+          Preferences.setServiceEnabled(MainActivity.this, false);
+        }
+      } else {
+        stopService(serviceIntent);
       }
+    }
+  }
+
+  private boolean startForegroundServiceSafely(Intent serviceIntent) {
+    try {
+      ContextCompat.startForegroundService(this, serviceIntent);
+      return true;
+    } catch (RuntimeException exception) {
+      android.util.Log.e("MainActivity", "Unable to start foreground service", exception);
+      Toast.makeText(this, R.string.service_start_failed, Toast.LENGTH_LONG).show();
+      return false;
     }
   }
 
@@ -169,12 +196,14 @@ public class MainActivity extends AppCompatActivity
       intent.putExtra(Constants.SENDER_NAME_KEY, "");
       intent.putExtra(Constants.SENDER_NUM_KEY, "");
       intent.putExtra(Constants.MESSAGE_KEY, "");
+      intent.putExtra(Constants.ALARM_MESSAGE_KEY, "");
       intent.putExtra(Constants.IGNORE_KEY, "false");
     } else {
       ListItem item = listItems.get(itemId);
       intent.putExtra(Constants.SENDER_NAME_KEY, item.getSenderName());
       intent.putExtra(Constants.SENDER_NUM_KEY, item.getSenderNum());
       intent.putExtra(Constants.MESSAGE_KEY, item.getMessagePrefix());
+      intent.putExtra(Constants.ALARM_MESSAGE_KEY, item.getAlarmMessagePrefix());
       intent.putExtra(Constants.IGNORE_KEY, item.getIgnoreRequests());
     }
 
@@ -203,6 +232,7 @@ public class MainActivity extends AppCompatActivity
       String senderName = data.getStringExtra(Constants.SENDER_NAME_KEY);
       String senderNum = data.getStringExtra(Constants.SENDER_NUM_KEY);
       String message = data.getStringExtra(Constants.MESSAGE_KEY);
+      String alarmMessage = data.getStringExtra(Constants.ALARM_MESSAGE_KEY);
       boolean ignore = data.getBooleanExtra(Constants.IGNORE_KEY, false);
 
       if (itemId == -1) {
@@ -212,11 +242,12 @@ public class MainActivity extends AppCompatActivity
                         Snackbar.LENGTH_LONG).show();
           return;
         }
-        listItems.add(new ListItem(senderName, senderNum, message, ignore));
+        listItems.add(new ListItem(senderName, senderNum, message, alarmMessage, ignore));
       } else {
         ListItem item = listItems.get(itemId);
         item.setSenderName(senderName);
         item.setMessagePrefix(message);
+        item.setAlarmMessagePrefix(alarmMessage);
         item.setIgnoreRequests(ignore);
       }
     }
@@ -230,14 +261,60 @@ public class MainActivity extends AppCompatActivity
   }
 
   // ListManager implementation
+  private boolean sendRequestSms(ListItem item, String message) {
+    if (item == null || item.getSenderNum() == null ||
+        item.getSenderNum().trim().isEmpty() ||
+        message == null || message.trim().isEmpty()) {
+      Toast.makeText(this, R.string.sms_send_failed, Toast.LENGTH_LONG).show();
+      return false;
+    }
+
+    try {
+      SmsManager smsManager = getSystemService(SmsManager.class);
+      if (smsManager == null) {
+        Toast.makeText(this, R.string.sms_send_failed, Toast.LENGTH_LONG).show();
+        return false;
+      }
+      smsManager.sendTextMessage(item.getSenderNum(), null, message, null, null);
+      return true;
+    } catch (RuntimeException exception) {
+      android.util.Log.e("MainActivity", "Unable to send SMS", exception);
+      Toast.makeText(this, R.string.sms_send_failed, Toast.LENGTH_LONG).show();
+      return false;
+    }
+  }
+
   @Override
   public void requestLocation(ListItem item) {
-    // Send SMS
-    SmsManager smsManager = getSystemService(SmsManager.class);
-    smsManager.sendTextMessage(item.getSenderNum(), null, item.getMessagePrefix(), null, null);
+    if (sendRequestSms(item, item.getMessagePrefix())) {
+      Toast.makeText(this, getString(R.string.location_request) + " " + item, Toast.LENGTH_LONG).show();
+    }
+  }
 
-    // Notify user that SMS sent
-    Toast.makeText(this, getString(R.string.location_request) + " " + item, Toast.LENGTH_LONG).show();
+  @Override
+  public void requestRing(ListItem item) {
+    String ringMessage = item.getAlarmMessagePrefix();
+    if (ringMessage.isEmpty()) {
+      Toast.makeText(this, R.string.ring_request_not_configured, Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    if (sendRequestSms(item, ringMessage)) {
+      Toast.makeText(this, getString(R.string.ring_request) + " " + item, Toast.LENGTH_LONG).show();
+    }
+  }
+
+  @Override
+  public void requestRingStop(ListItem item) {
+    String ringMessage = item.getAlarmMessagePrefix();
+    if (ringMessage.isEmpty()) {
+      Toast.makeText(this, R.string.ring_request_not_configured, Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    if (sendRequestSms(item, ringMessage + " STOP")) {
+      Toast.makeText(this, getString(R.string.ring_stop_request) + " " + item, Toast.LENGTH_LONG).show();
+    }
   }
 
   @Override

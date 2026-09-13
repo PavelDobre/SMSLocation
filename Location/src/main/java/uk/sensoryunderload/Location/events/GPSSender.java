@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import uk.sensoryunderload.Location.data.Preferences;
 
@@ -103,7 +105,7 @@ public final class GPSSender {
         returnString = this.type.toString();
 
         if (this.type.isLastKnown()) {
-          long millis = Calendar.getInstance().getTimeInMillis() - this.location.getElapsedRealtimeAgeMillis();
+          long millis = Calendar.getInstance().getTimeInMillis() - getLocationAgeMillis(this.location);
           Date date = new Date(millis);
           returnString += " " + DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
         }
@@ -118,6 +120,11 @@ public final class GPSSender {
   private static final ArrayList<String> recipients = new ArrayList<String>();
   private static final ArrayList<LocationListener> locationListeners = new ArrayList<LocationListener>();
   private static LocationCallback fusedLocationCallback = null;
+  private static final Handler handler = new Handler(Looper.getMainLooper());
+  private static Runnable timeoutRunnable = null;
+  private static Runnable systemProvidersRunnable = null;
+  private static final long GOOGLE_HEAD_START_MS = 10000;
+  private static final long GLOBAL_TIMEOUT_MS = 90000;
 
   // Following a call of the following method all location requests will
   // be triggered (with disabled ones failing immediately). Any fail or
@@ -126,6 +133,14 @@ public final class GPSSender {
   // with any successful result inserted into results. After a global
   // timeout all results' pending members are set to false and
   // notifyResults will be called.
+  private static long getLocationAgeMillis(Location location) {
+    long ageNanos = SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos();
+    if (ageNanos < 0) {
+      return 0;
+    }
+    return TimeUnit.NANOSECONDS.toMillis(ageNanos);
+  }
+
   @SuppressLint("MissingPermission")
   public static void notify(Context _context, String recipient) {
     final boolean newRequest = (recipients.size() == 0);
@@ -137,26 +152,68 @@ public final class GPSSender {
       for (int i = 0; i < ResultType.values().length; ++i) {
         results[i] = new Result(i);
       }
-      context = _context;
+      context = _context.getApplicationContext();
       minimumLocationAccuracy = Preferences.getLocationAccuracy(context);
       int maximumAttemptsNumber = Preferences.getAttemptsNumber(context);
 
-      notifyFusedProvider(maximumAttemptsNumber);
-      notifySystemProvider(LocationManager.GPS_PROVIDER,
-                           maximumAttemptsNumber);
-      notifySystemProvider(LocationManager.NETWORK_PROVIDER,
-                           maximumAttemptsNumber);
+      try {
+        notifyFusedProvider(maximumAttemptsNumber);
+      } catch (SecurityException exception) {
+        Log.e(TAG, "Fused location access denied", exception);
+        results[ResultType.GOOGLE.ordinal()].pending = false;
+        results[ResultType.GOOGLE_LAST_KNOWN.ordinal()].pending = false;
+      } catch (RuntimeException exception) {
+        Log.e(TAG, "Unable to start fused location request", exception);
+        results[ResultType.GOOGLE.ordinal()].pending = false;
+        results[ResultType.GOOGLE_LAST_KNOWN.ordinal()].pending = false;
+      }
 
-      Handler handler = new Handler(Looper.getMainLooper());
-      handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          for (Result result : results) {
-            result.pending = false;
-          }
-          notifyResults();
+      // Give Google/Fused Location a short head start when it is selected.
+      // GPS and Network still run as fallbacks, but they do not start at the
+      // exact same time as Google anymore.
+      boolean giveGoogleHeadStart =
+              Preferences.isFusedLocationEnabled(context) &&
+              Preferences.areGooglePlayServicesAvailable(context);
+
+      systemProvidersRunnable = () -> {
+        if (context == null || recipients.isEmpty()) {
+          return;
         }
-      }, 90000); // After 90s
+        try {
+          notifySystemProvider(LocationManager.GPS_PROVIDER,
+                               maximumAttemptsNumber);
+          notifySystemProvider(LocationManager.NETWORK_PROVIDER,
+                               maximumAttemptsNumber);
+        } catch (SecurityException exception) {
+          Log.e(TAG, "System location provider access denied", exception);
+          markSystemProvidersFailed();
+          notifyResults();
+        } catch (RuntimeException exception) {
+          Log.e(TAG, "System location provider failed", exception);
+          markSystemProvidersFailed();
+          notifyResults();
+        } finally {
+          systemProvidersRunnable = null;
+        }
+      };
+
+      if (giveGoogleHeadStart) {
+        handler.postDelayed(systemProvidersRunnable, GOOGLE_HEAD_START_MS);
+      } else {
+        systemProvidersRunnable.run();
+      }
+
+      timeoutRunnable = () -> {
+        if (results == null || recipients.isEmpty()) {
+          return;
+        }
+        for (Result result : results) {
+          result.pending = false;
+        }
+        timeoutRunnable = null;
+        notifyResults();
+      };
+      handler.postDelayed(timeoutRunnable, GLOBAL_TIMEOUT_MS);
     }
   }
 
@@ -188,7 +245,7 @@ public final class GPSSender {
                 (result.location.getAccuracy() < minimumLocationAccuracy)) {
               // Send this result
               for (String recipient : recipients) {
-                (new SMSSender(recipient, result.location, result.toString())).sendMessage();
+                (new SMSSender(context, recipient, result.location, result.toString())).sendMessage();
               }
               reset();
               return;
@@ -228,7 +285,7 @@ public final class GPSSender {
                 !result.pending &&
                 (result.location != null)) {
               if ((bestResult == null) ||
-                  (result.location.getElapsedRealtimeAgeMillis() < bestResult.location.getElapsedRealtimeAgeMillis())) {
+                  (getLocationAgeMillis(result.location) < getLocationAgeMillis(bestResult.location))) {
                 bestResult = result;
               }
             }
@@ -243,7 +300,7 @@ public final class GPSSender {
         }
 
         for (String recipient : recipients) {
-          (new SMSSender(recipient, location, bestResultProvider)).sendMessage();
+          (new SMSSender(context, recipient, location, bestResultProvider)).sendMessage();
         }
         reset();
       }
@@ -253,14 +310,36 @@ public final class GPSSender {
   // Resets the "recipients" array, along with any pending location
   // requests.
   private static void reset() {
-    LocationManager systemLocationProvider = (LocationManager) context
-            .getSystemService(Context.LOCATION_SERVICE);
-    for (LocationListener listener : locationListeners) {
-      systemLocationProvider.removeUpdates(listener);
+    if (timeoutRunnable != null) {
+      handler.removeCallbacks(timeoutRunnable);
+      timeoutRunnable = null;
     }
-    if (fusedLocationCallback != null) {
-      FusedLocationProviderClient fusedLocationProvider = LocationServices.getFusedLocationProviderClient(context);
-      fusedLocationProvider.removeLocationUpdates(fusedLocationCallback);
+    if (systemProvidersRunnable != null) {
+      handler.removeCallbacks(systemProvidersRunnable);
+      systemProvidersRunnable = null;
+    }
+
+    if (context != null) {
+      LocationManager systemLocationProvider = (LocationManager) context
+              .getSystemService(Context.LOCATION_SERVICE);
+      if (systemLocationProvider != null) {
+        for (LocationListener listener : locationListeners) {
+          try {
+            systemLocationProvider.removeUpdates(listener);
+          } catch (RuntimeException exception) {
+            Log.w(TAG, "Unable to remove system location listener", exception);
+          }
+        }
+      }
+      if (fusedLocationCallback != null) {
+        try {
+          FusedLocationProviderClient fusedLocationProvider =
+                  LocationServices.getFusedLocationProviderClient(context);
+          fusedLocationProvider.removeLocationUpdates(fusedLocationCallback);
+        } catch (RuntimeException exception) {
+          Log.w(TAG, "Unable to remove fused location listener", exception);
+        }
+      }
     }
 
     locationListeners.clear();
@@ -268,6 +347,16 @@ public final class GPSSender {
 
     recipients.clear();
     context = null;
+  }
+
+  private static void markSystemProvidersFailed() {
+    if (results == null) {
+      return;
+    }
+    results[ResultType.GPS.ordinal()].pending = false;
+    results[ResultType.GPS_LAST_KNOWN.ordinal()].pending = false;
+    results[ResultType.NETWORK.ordinal()].pending = false;
+    results[ResultType.NETWORK_LAST_KNOWN.ordinal()].pending = false;
   }
 
   @SuppressLint("MissingPermission")
@@ -291,7 +380,14 @@ public final class GPSSender {
       fusedLocationCallback = new FusedLocationCallback(
               fusedLocationProvider, maximumAttemptsNumber);
       fusedLocationProvider.requestLocationUpdates(
-              locationRequest, fusedLocationCallback, null);
+              locationRequest, fusedLocationCallback, null)
+              .addOnFailureListener(exception -> {
+                Log.e(TAG, "Fused current-location request failed", exception);
+                if (results != null) {
+                  results[ResultType.GOOGLE.ordinal()].pending = false;
+                  notifyResults();
+                }
+              });
     } else {
       result.pending = false;
     }
@@ -408,11 +504,20 @@ public final class GPSSender {
     @Override
     public void onComplete(@NonNull Task<Location> task) {
       Log.i(TAG, "Received last known location from fused provider");
-      Location location = task.getResult();
-      if (location != null) {
-        Log.i(TAG, "Recording last known location from fused provider");
-        results[ResultType.GOOGLE_LAST_KNOWN.ordinal()].location = location;
+      if (results == null) {
+        return;
       }
+
+      if (task.isSuccessful()) {
+        Location location = task.getResult();
+        if (location != null) {
+          Log.i(TAG, "Recording last known location from fused provider");
+          results[ResultType.GOOGLE_LAST_KNOWN.ordinal()].location = location;
+        }
+      } else {
+        Log.e(TAG, "Fused last-known location request failed", task.getException());
+      }
+
       results[ResultType.GOOGLE_LAST_KNOWN.ordinal()].pending = false;
       notifyResults();
     }

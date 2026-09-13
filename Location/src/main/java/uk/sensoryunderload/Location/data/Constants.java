@@ -6,6 +6,7 @@ public class Constants {
   public static final String SENDER_NAME_KEY = "sender_name";
   public static final String SENDER_NUM_KEY = "sender";
   public static final String MESSAGE_KEY = "message";
+  public static final String ALARM_MESSAGE_KEY = "alarm_message";
   public static final String IGNORE_KEY = "ignore";
 
   // Activities request codes.
@@ -32,4 +33,7 @@ public class Constants {
   // Notification settings for the foreground service.
   public static final String NOTIFICATION_CHANNEL_ID = "ForegroundService";
   public static final int NOTIFICATION_ID = 546;
+
+  public static final String ALARM_NOTIFICATION_CHANNEL_ID = "RemoteAlarm";
+  public static final int ALARM_NOTIFICATION_ID = 547;
 }

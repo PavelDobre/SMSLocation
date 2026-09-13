@@ -17,9 +17,11 @@ import uk.sensoryunderload.Location.R;
 import uk.sensoryunderload.Location.data.ListItem;
 
 final public class ListItemAdapter extends ArrayAdapter<ListItem>
-                                   implements View.OnClickListener {
+                                   implements View.OnClickListener, View.OnLongClickListener {
   public interface ListManager {
     void requestLocation(ListItem item);
+    void requestRing(ListItem item);
+    void requestRingStop(ListItem item);
     void editItem(int position);
   }
 
@@ -30,6 +32,7 @@ final public class ListItemAdapter extends ArrayAdapter<ListItem>
     ImageView ignoreIndicator;
     TextView itemText;
     Button requestButton;
+    Button ringButton;
   }
 
   public ListItemAdapter(ArrayList<ListItem> items, ListManager lr, Context context) {
@@ -43,12 +46,31 @@ final public class ListItemAdapter extends ArrayAdapter<ListItem>
     int position = (Integer) v.getTag();
 
     if (v.getId() == R.id.requestLocationButton) {
-      ListItem item = getItem (position);
+      ListItem item = getItem(position);
       this.listManager.requestLocation(item);
+    }
+    if (v.getId() == R.id.requestRingButton) {
+      ListItem item = getItem(position);
+      this.listManager.requestRing(item);
     }
     if (v.getId() == R.id.listItemTextView) {
       this.listManager.editItem(position);
     }
+  }
+
+  @Override
+  public boolean onLongClick(View v) {
+    if (v.getId() != R.id.requestRingButton || !(v.getTag() instanceof Integer)) {
+      return false;
+    }
+
+    int position = (Integer) v.getTag();
+    ListItem item = getItem(position);
+    if (item == null) {
+      return false;
+    }
+    this.listManager.requestRingStop(item);
+    return true;
   }
 
   @NonNull
@@ -66,6 +88,7 @@ final public class ListItemAdapter extends ArrayAdapter<ListItem>
       viewHolder.ignoreIndicator = (ImageView) convertView.findViewById(R.id.ignoreImageView);
       viewHolder.itemText = (TextView) convertView.findViewById(R.id.listItemTextView);
       viewHolder.requestButton = (Button) convertView.findViewById(R.id.requestLocationButton);
+      viewHolder.ringButton = (Button) convertView.findViewById(R.id.requestRingButton);
 
       convertView.setTag(viewHolder);
     } else {
@@ -84,6 +107,12 @@ final public class ListItemAdapter extends ArrayAdapter<ListItem>
     viewHolder.itemText.setTag(position);
     viewHolder.requestButton.setOnClickListener(this);
     viewHolder.requestButton.setTag(position);
+
+    boolean ringConfigured = !item.getAlarmMessagePrefix().isEmpty();
+    viewHolder.ringButton.setEnabled(ringConfigured);
+    viewHolder.ringButton.setOnClickListener(this);
+    viewHolder.ringButton.setOnLongClickListener(this);
+    viewHolder.ringButton.setTag(position);
 
     // Return the completed view to render on screen
     return convertView;

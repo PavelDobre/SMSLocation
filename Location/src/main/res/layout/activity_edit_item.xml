@@ -68,6 +68,21 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alarm_prefix_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/alarm_prefix_label"
+            android:paddingTop="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/alarm_prefix_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <CheckBox
             android:id="@+id/ignore_requests_checkbox"
             android:hint="@string/ignore_requests_label"

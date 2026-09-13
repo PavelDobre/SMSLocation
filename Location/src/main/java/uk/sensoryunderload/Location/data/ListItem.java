@@ -17,12 +17,15 @@ public final class ListItem {
   private String senderName;
   private final String sender;
   private String messagePrefix;
+  private String alarmMessagePrefix;
   private boolean ignoreRequests;
 
-  public ListItem(String senderName, String senderNum, String messagePrefix, boolean ignoreRequests) {
+  public ListItem(String senderName, String senderNum, String messagePrefix,
+                  String alarmMessagePrefix, boolean ignoreRequests) {
     this.senderName = senderName;
     this.sender = senderNum;
     this.messagePrefix = messagePrefix;
+    this.alarmMessagePrefix = alarmMessagePrefix;
     this.ignoreRequests = ignoreRequests;
   }
 
@@ -48,6 +51,13 @@ public final class ListItem {
     return messagePrefix;
   }
 
+  public String getAlarmMessagePrefix() {
+    // Older saved ListItems do not contain this field. Gson will deserialize
+    // it as null, which means the remote alarm command is disabled for that
+    // entry until the user configures it.
+    return alarmMessagePrefix == null ? "" : alarmMessagePrefix;
+  }
+
   public boolean getIgnoreRequests() {
     return ignoreRequests;
   }
@@ -58,6 +68,10 @@ public final class ListItem {
 
   public void setMessagePrefix(String messagePrefix) {
     this.messagePrefix = messagePrefix;
+  }
+
+  public void setAlarmMessagePrefix(String alarmMessagePrefix) {
+    this.alarmMessagePrefix = alarmMessagePrefix;
   }
 
   public void setIgnoreRequests(boolean ignoreRequests) {
@@ -77,6 +91,11 @@ public final class ListItem {
   }
 
   private static boolean senderMatches(ListItem item, String sender, Context context) {
+    if (item == null || item.sender == null || item.sender.trim().isEmpty() ||
+        sender == null || sender.trim().isEmpty()) {
+      return false;
+    }
+
     if (item.sender.charAt(0) == '+') {
       // item.sender already has a country code prepended, so matching
       // is simple.
@@ -86,7 +105,7 @@ public final class ListItem {
           ((Build.VERSION.SDK_INT < 33) ||
            context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY_RADIO_ACCESS))) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String countryCode = tm.getNetworkCountryIso();
+        String countryCode = (tm == null) ? null : tm.getNetworkCountryIso();
         if ((countryCode != null) && (!countryCode.equals(""))) {
           return PhoneNumberUtils.areSamePhoneNumber(item.sender, sender, countryCode);
         }
@@ -113,11 +132,43 @@ public final class ListItem {
     for (ListItem item : listItems) {
       if (!item.getIgnoreRequests() &&
           senderMatches(item, sender, context) &&
+          item.messagePrefix != null &&
+          !item.messagePrefix.isEmpty() &&
           message.startsWith(item.messagePrefix)) {
         return item;
       }
     }
 
     return null;
+  }
+
+  public static ListItem getAlarmMatch(ArrayList<ListItem> listItems,
+                                       String sender, String message, Context context) {
+    if (message == null) {
+      return null;
+    }
+
+    String trimmedMessage = message.trim();
+    for (ListItem item : listItems) {
+      String alarmPrefix = item.getAlarmMessagePrefix().trim();
+      if (!item.getIgnoreRequests() &&
+          senderMatches(item, sender, context) &&
+          !alarmPrefix.isEmpty() &&
+          (trimmedMessage.equals(alarmPrefix) ||
+           trimmedMessage.equals(alarmPrefix + " STOP"))) {
+        return item;
+      }
+    }
+
+    return null;
+  }
+
+  public static boolean isAlarmStopMessage(ListItem item, String message) {
+    if (item == null || message == null) {
+      return false;
+    }
+    String alarmPrefix = item.getAlarmMessagePrefix().trim();
+    return !alarmPrefix.isEmpty() &&
+           message.trim().equals(alarmPrefix + " STOP");
   }
 }

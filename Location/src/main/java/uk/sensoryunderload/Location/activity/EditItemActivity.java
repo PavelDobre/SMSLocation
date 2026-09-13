@@ -37,8 +37,10 @@ public class EditItemActivity extends AppCompatActivity {
   private EditText senderNameInput;
   private EditText senderNumInput;
   private EditText prefixInput;
+  private EditText alarmPrefixInput;
   private TextInputLayout senderInputLayout;
   private TextInputLayout prefixInputLayout;
+  private TextInputLayout alarmPrefixInputLayout;
   private CheckBox ignoreCheckBox;
 
   @Override
@@ -55,8 +57,10 @@ public class EditItemActivity extends AppCompatActivity {
     senderNameInput = findViewById(R.id.sender_name_input);
     senderNumInput = findViewById(R.id.sender_num_input);
     prefixInput = findViewById(R.id.prefix_input);
+    alarmPrefixInput = findViewById(R.id.alarm_prefix_input);
     senderInputLayout = findViewById(R.id.sender_num_input_layout);
     prefixInputLayout = findViewById(R.id.prefix_input_layout);
+    alarmPrefixInputLayout = findViewById(R.id.alarm_prefix_input_layout);
     ignoreCheckBox = findViewById(R.id.ignore_requests_checkbox);
     pickContactButton = findViewById(R.id.pick_contact_button);
 
@@ -79,6 +83,7 @@ public class EditItemActivity extends AppCompatActivity {
       String senderName = getIntent().getStringExtra(Constants.SENDER_NAME_KEY);
       String senderNum = getIntent().getStringExtra(Constants.SENDER_NUM_KEY);
       String prefix = getIntent().getStringExtra(Constants.MESSAGE_KEY);
+      String alarmPrefix = getIntent().getStringExtra(Constants.ALARM_MESSAGE_KEY);
       boolean ignore = getIntent().getBooleanExtra(Constants.IGNORE_KEY, false);
 
       if (senderName != null) {
@@ -89,6 +94,7 @@ public class EditItemActivity extends AppCompatActivity {
       }
       senderNumInput.setText(senderNum);
       prefixInput.setText(prefix);
+      alarmPrefixInput.setText(alarmPrefix == null ? "" : alarmPrefix);
       ignoreCheckBox.setChecked(ignore);
 
       // Only changing the prefix or the name is allowed.
@@ -109,6 +115,12 @@ public class EditItemActivity extends AppCompatActivity {
       }
     });
 
+    alarmPrefixInput.setOnFocusChangeListener((v, hasFocus) -> {
+      if (hasFocus) {
+        alarmPrefixInputLayout.setError(null);
+      }
+    });
+
     deleteButton.setOnClickListener(v -> {
       Intent result = new Intent(this, MainActivity.class);
       result.putExtra(Constants.ITEM_ID_KEY, getIntent().getIntExtra(
@@ -122,8 +134,15 @@ public class EditItemActivity extends AppCompatActivity {
         senderInputLayout.setError(getString(R.string.field_empty_label));
         return;
       }
-      if (prefixInput.getText().toString().isEmpty()) {
+      String locationPrefix = prefixInput.getText().toString().trim();
+      String alarmPrefix = alarmPrefixInput.getText().toString().trim();
+      if (locationPrefix.isEmpty()) {
         prefixInputLayout.setError(getString(R.string.field_empty_label));
+        return;
+      }
+      if (!alarmPrefix.isEmpty() &&
+          (locationPrefix.startsWith(alarmPrefix) || alarmPrefix.startsWith(locationPrefix))) {
+        alarmPrefixInputLayout.setError(getString(R.string.request_prefixes_overlap));
         return;
       }
       if (senderNumInput.getText().charAt(0) != '+') {
@@ -197,6 +216,8 @@ public class EditItemActivity extends AppCompatActivity {
                     senderNumInput.getText().toString().trim());
     result.putExtra(Constants.MESSAGE_KEY,
                     prefixInput.getText().toString().trim());
+    result.putExtra(Constants.ALARM_MESSAGE_KEY,
+                    alarmPrefixInput.getText().toString().trim());
     result.putExtra(Constants.IGNORE_KEY,
                     ignoreCheckBox.isChecked());
     setResult(Constants.EDIT_ITEM_ADD_RESULT_CODE, result);

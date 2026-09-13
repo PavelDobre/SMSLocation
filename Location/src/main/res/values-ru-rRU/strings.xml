@@ -10,20 +10,33 @@
 
     <string name="enable_service_switch">Активировать службу</string>
     <string name="service_running">Служба запущена</string>
+    <string name="service_start_failed">Не удалось запустить фоновую службу на этом устройстве.</string>
     <string name="service_channel">Служебный канал</string>
-    <!-- <string name="location_request">Sent a location request to </string> -->
+    <string name="location_request">Отправлен запрос местоположения: </string>
+    <string name="ring_request">Отправлен запрос RING: </string>
+    <string name="ring_request_not_configured">Код запроса звонка для этого номера не настроен</string>
+    <string name="ring_stop_request">Отправлен запрос остановки звонка: </string>
+    <string name="sms_send_failed">Не удалось отправить SMS. Проверьте разрешение SMS, SIM-карту/подписку и номер получателя.</string>
+    <string name="remote_alarm_active">Громкий сигнал активен</string>
+    <string name="stop_alarm_button">СТОП</string>
+    <string name="alarm_notification_channel">Удалённый сигнал</string>
+    <string name="alarm_notification_title">Сигнал SMSLocation</string>
+    <string name="alarm_notification_text">Телефон издаёт громкий сигнал. Нажмите СТОП, чтобы отключить.</string>
 
     <!-- Edit/New contact form -->
     <string name="sender_name_label">Имя отправителя:</string>
     <string name="sender_num_label">Номер отправителя:</string>
     <string name="pick_contact_button">Выбрать контакт…</string>
-    <string name="prefix_label">Префикс сообщения отправителя:</string>
+    <string name="prefix_label">Префикс запроса местоположения:</string>
+    <string name="alarm_prefix_label">Префикс команды звонка (необязательно):</string>
     <!-- <string name="ignore_request_label">Ignore location requests from this number</string> -->
-    <!-- <string name="location_request_label">Send request for location</string> -->
+    <string name="location_request_label">Отправить запрос местоположения</string>
+    <string name="ring_request_label">Отправить RING; долгое нажатие отправляет STOP</string>
     <string name="delete_button">Удалить</string>
     <string name="cancel_button">Закрыть</string>
     <string name="save_button">Сохранить</string>
     <string name="field_empty_label">Это поле не может быть пустым</string>
+    <string name="request_prefixes_overlap">Префиксы местоположения и звонка должны отличаться и не должны начинаться друг с друга</string>
     <!-- <string name="number_not_international">This field must start with a country code (\"+xx\")</string> -->
     <string name="item_already_added_warning">Этот номер уже есть в списке!</string>
     <!-- <string name="number_missing">Your contacts provider didn\'t return a number. Either use a different contacts provider or manually enter the contact\'s details.</string> -->

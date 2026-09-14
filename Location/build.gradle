@@ -34,7 +34,7 @@ android {
 
         applicationId project.ext.applicationId
         versionName Version_Name
-        versionCode 5
+        versionCode 6
 //        signingConfig signingConfigs.release
     }
 

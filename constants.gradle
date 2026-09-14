@@ -5,5 +5,5 @@ project.ext {
     targetSdkVersion = 31
     compileSdkVersion = 33
     javaVersion = JavaVersion.VERSION_17
-    applicationId = 'uk.sensoryunderload.Location'
+    applicationId = 'pt.dobre.smslocation'
 }

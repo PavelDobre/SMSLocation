@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.DayNight" />
+
+    <!-- Fixed colours on purpose: the alarm screen must look identical in
+         light and dark mode so it is recognisable at a glance. -->
+    <style name="AppTheme.Alarm" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/alarm_background</item>
+        <item name="android:statusBarColor">@color/alarm_background</item>
+        <item name="android:navigationBarColor">@color/alarm_background</item>
+    </style>
 </resources>

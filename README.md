@@ -84,3 +84,9 @@ It is not a professionally engineered, audited, or supported tracking or securit
 **Do not rely on SMSLocation for emergencies, personal safety, theft prevention, medical situations, or other critical use cases.**
 
 Use it at your own risk.
+
+## Credits and licence
+
+SMSLocation inspired by [anevero/sms_my_gps](https://github.com/anevero/sms_my_gps)
+
+Licensed under the GNU General Public License, version 2 — see `LICENSE.txt`.

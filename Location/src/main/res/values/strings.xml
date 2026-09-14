@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SMSLocation</string>
-    <string name="app_version">Version 3</string>
+    <string name="app_version">Version 4.2</string>
 
     <string name="add_item">Add item</string>
     <string name="edit_item">Edit item</string>
@@ -51,15 +51,15 @@
     <string name="other_settings_label">Other settings</string>
 
     <string name="fused_switch">Google Location Services</string>
-    <string name="fused_switch_summary">Uses different sensors (including GPS) to get quite accurate location in several tens of seconds.</string>
+    <string name="fused_switch_summary">Google Location Services</string>
     <string name="fused_last_known_switch">Last known location (Google Location Services)</string>
     <string name="fused_last_known_switch_summary">Last known location can be sent almost immediately (if available) but can be quite outdated.</string>
     <string name="system_gps_switch">GPS</string>
-    <string name="system_gps_switch_summary">Sometimes GPS module can provide a more accurate location than Google Location Services (but it can take up to several minutes).</string>
+    <string name="system_gps_switch_summary">GPS module.</string>
     <string name="system_gps_last_known_switch">Last known location (GPS)</string>
-    <string name="system_gps_last_known_switch_summary">Gets the last known location using only the GPS sensor.</string>
+    <string name="system_gps_last_known_switch_summary">Last known GPS location.</string>
     <string name="system_network_switch">Network</string>
-    <string name="system_network_switch_summary">Uses cellular and nearest WiFi networks to determine the location. Can be less accurate than GPS but is faster.</string>
+    <string name="system_network_switch_summary">Cellular and WiFi networks to determine the location.</string>
     <string name="system_network_last_known_switch">Last known location (network)</string>
     <string name="system_network_last_known_switch_summary">Gets the last known location using only the network info.</string>
     <string name="location_accuracy_dropdown">Necessary accuracy (meters)</string>

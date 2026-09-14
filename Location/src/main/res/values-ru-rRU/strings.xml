@@ -56,15 +56,15 @@
     <string name="other_settings_label">Другие настройки</string>
 
     <string name="fused_switch">Google Location Services</string>
-    <string name="fused_switch_summary">Использует разные датчики устройства (в том числе GPS), чтобы получить местоположение за несколько десятков секунд.</string>
+    <string name="fused_switch_summary">Google Location Services использует разные датчики (в том числе GPS).</string>
     <string name="fused_last_known_switch">Последнее известное местоположение (Google Location Services)</string>
     <string name="fused_last_known_switch_summary">Последнее известное местоположение может быть отправлено сразу (если доступно), но может быть довольно устаревшим.</string>
     <string name="system_gps_switch">GPS</string>
-    <string name="system_gps_switch_summary">Иногда модуль GPS может предоставить более точное местоположение, чем Google Location Services (но это может занять до нескольких минут).</string>
+    <string name="system_gps_switch_summary">Модуль GPS.</string>
     <string name="system_gps_last_known_switch">Последнее известное местоположение (GPS)</string>
-    <string name="system_gps_last_known_switch_summary">Получает последнее известное местоположение, используя только датчик GPS.</string>
+    <string name="system_gps_last_known_switch_summary">Последнее известное местоположение GPS.</string>
     <string name="system_network_switch">Сеть</string>
-    <string name="system_network_switch_summary">Использует сотовую и доступные Wi-Fi сети для определения местоположения. Оно может быть менее точным, чем при использовании GPS, но получить его можно быстрее.</string>
+    <string name="system_network_switch_summary">Сотовая и Wi-Fi сети для определения местоположения.</string>
     <string name="system_network_last_known_switch">Последнее известное местоположение (сеть)</string>
     <string name="system_network_last_known_switch_summary">Получает последнее известное местоположение, используя только информацию о сетях.</string>
     <string name="location_accuracy_dropdown">Требуемая точность (метры)</string>
